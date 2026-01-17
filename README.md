@@ -1,42 +1,44 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# Tiny Tapeout Verilog Project Template
+# Tiny Tapeout Logic Project Sample
+This is a sample project for the logic circuit of the TinyTapeout SKY130.
 
-- [Read the documentation for project](docs/info.md)
+# Set up the Development Environment on Ubuntu22.04
 
-## What is Tiny Tapeout?
 
-Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
+## Setup Variable
+```
+export PDK_ROOT=~/pdk/
+export PDK=sky130A
+export LIBRELANE_TAG=2.4.2
+```
 
-To learn more and get started, visit https://tinytapeout.com.
+## Setup Softwares
+```
+sudo apt install python3.10-venv python3-tk librsvg2-bin pngquant make iverilog
+mkdir ~/ttsetup
+python3 -m venv ~/ttsetup/venv
+source ~/ttsetup/venv/bin/activate
+git clone https://github.com/noritsuna/ttsky-verilog-sample_counter
+cd ttsky-verilog-sample_counter
+git clone https://github.com/TinyTapeout/tt-support-tools tt
+pip install -r ./tt/requirements.txt
+pip install librelane==$LIBRELANE_TAG
 
-## Set up your Verilog project
 
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
+## Initial Config
+```
+cd ttsky-verilog-sample_counter
+./tt/tt_tool.py --create-user-config
+```
 
-The GitHub action will automatically build the ASIC files using [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/).
+## Build Project
+`./tt/tt_tool.py --harden`
 
-## Enable GitHub actions to build the results page
 
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
-
-## Resources
-
-- [FAQ](https://tinytapeout.com/faq/)
-- [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
-- [Join the community](https://tinytapeout.com/discord)
-- [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
-
-## What next?
-
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
-  - Bluesky [@tinytapeout.com](https://bsky.app/profile/tinytapeout.com)
+## Run Test
+```
+cd ttsky-verilog-sample_counter/test
+pip install -r requirements.txt
+make -B
+```
